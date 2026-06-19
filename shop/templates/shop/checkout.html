@@ -1,0 +1,80 @@
+{% extends 'shop/base.html' %}
+
+{% block title %}Checkout - Angels Supermarket{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Checkout</h1>
+
+{% if cart_items %}
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Order Items</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Product Number</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in cart_items %}
+                                <tr>
+                                    <td>{{ item.name }}</td>
+                                    <td>{{ item.product_number }}</td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>${{ item.price }}</td>
+                                    <td>${{ item.subtotal|floatformat:2 }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Order Summary</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Total Items:</span>
+                        <strong>{{ total_items }}</strong>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-4">
+                        <span>Total Amount:</span>
+                        <strong class="text-primary" style="font-size: 1.5rem;">${{ total_amount|floatformat:2 }}</strong>
+                    </div>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-grid gap-2">
+                            <button type="submit" name="action" value="order" class="btn btn-success btn-lg">
+                                <i class="bi bi-check-circle"></i> Place Order
+                            </button>
+                            <button type="submit" name="action" value="cancel" class="btn btn-outline-danger">
+                                <i class="bi bi-x-circle"></i> Cancel Order
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="alert alert-warning">
+        <i class="bi bi-exclamation-triangle"></i> Your cart is empty. <a href="{% url 'product_list' %}">Add items to cart</a> first.
+    </div>
+{% endif %}
+{% endblock %}
+

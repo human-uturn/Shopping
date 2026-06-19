@@ -1,0 +1,54 @@
+{% extends 'shop/base.html' %}
+
+{% block title %}{{ product.name }} - Angels Supermarket{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        {% if product.picture %}
+        <img src="{{ product.picture.url }}" class="img-fluid rounded" alt="{{ product.name }}">
+        {% else %}
+        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 400px;">
+            <i class="bi bi-image" style="font-size: 5rem; color: #ccc;"></i>
+        </div>
+        {% endif %}
+    </div>
+    <div class="col-md-6">
+        <h1>{{ product.name }}</h1>
+        <p class="text-muted">{{ product.description }}</p>
+        
+        <div class="mb-3">
+            <span class="badge bg-secondary me-2">{{ product.category }}</span>
+            <span class="badge bg-info">Stock: {{ product.quantity }}</span>
+        </div>
+        
+        <div class="mb-4">
+            <h2 class="text-primary">${{ product.price }}</h2>
+        </div>
+        
+        <div class="mb-3">
+            <p><strong>Product Number:</strong> {{ product.product_number }}</p>
+        </div>
+        
+        {% if product.quantity > 0 %}
+        <form method="post" action="{% url 'add_to_cart' product.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success btn-lg">
+                <i class="bi bi-cart-plus"></i> Add to Cart
+            </button>
+        </form>
+        {% else %}
+        <button class="btn btn-secondary btn-lg" disabled>
+            <i class="bi bi-x-circle"></i> Out of Stock
+        </button>
+        {% endif %}
+        
+        <div class="mt-4">
+            <a href="{% url 'product_list' %}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Back to Products
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
