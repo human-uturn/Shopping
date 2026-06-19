@@ -8,7 +8,7 @@ import json
 
 
 def product_list(request):
-    """Display product list with search functionality"""
+    """Display  product list with search functionality"""
     form = ProductSearchForm(request.GET)
     products = Product.objects.filter(quantity__gt=0)
     
